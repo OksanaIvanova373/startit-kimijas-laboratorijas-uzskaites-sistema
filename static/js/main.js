@@ -89,7 +89,7 @@ let requestBodyJson = {
 let requestBodyString = JSON.stringify(requestBodyJson);
 
 
-let request = await fetch('https://pytonc.eu.pythonanywhere.com/api/v1/'+document.querySelector('#kategorija').value,
+let request = await fetch('/api/v1/'+document.querySelector('#kategorija').value,
          		{
             method:"POST",
   					headers:
@@ -135,7 +135,7 @@ async function dzestVieluAprikojumu(id,kategorija)
   
   if (confirm('Dzēst?')) 
   {
-    let request = await fetch('https://pytonc.eu.pythonanywhere.com/api/v1/'+kategorija+'/'+id+'/dzest',
+    let request = await fetch('/api/v1/'+kategorija+'/'+id+'/dzest',
                 {
                 method:"POST",
                 headers: {

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, json, request
 import dati
 
 
@@ -40,8 +40,10 @@ def lietotajs():
 
 @app.route('/api/v1/vielas')
 def vielas():
+  with open("dati/vielas.json","r", encoding="utf-8") as f:
+    dati = json.loads(f.read())
     # pārveidojam par json pirms atgriežam
-    return jsonify(dati.vielas)
+    return jsonify(dati)
 
 
 @app.route('/api/v1/viela/<vielasID>')
@@ -55,6 +57,50 @@ def viela_id(vielasID):
             viela = v
     return jsonify(viela)
 
+@app.route('/api/v1/viela', methods = ['POST'])
+def pievienot_vielu():
+  datne = "dati/vielas.json"
+    with open("dati/vielas.json","r", encoding="utf-8") as f:
+      vielas = json.loads(f.read())
+
+last_id = vielas[len(vielas)-1]['id']
+
+jauna_viela = json.load(request.data)
+
+last_id = vielas[len(vielas)-1]['id']
+
+
+jauna_viela['id'] = last_id + 1
+vielas.append(jauna_viela)
+
+
+  return "1"      
+
+
+
+
+@app.route('/api/v1/<kategorija>/<id>/dzest', methods = ['POST'])
+def dzest(kategorija, id):
+  if kategorija == "viela":
+    datne = "dati/vielas.json"
+  elif kategorija == "inventars":
+    datne = "dati/inventars.json"
+  else:
+    return "0"
+
+with open(datne, "r", encoding = 'utf-8') as f:
+  dati = json.loads(f.read())
+
+new_data = []
+for v in dati:
+  if str(v['id']) != id:
+    new_data.append(v)
+    
+with open(datne, "w", encoding = "utf-8") as f:
+  f.write(json.dumps(new_data))
+
+
+  return "1"     
 
 if __name__ == "__main__":
     app.run("0.0.0.0", debug=True)
