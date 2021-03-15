@@ -49,6 +49,17 @@ def vielas():
     return jsonify(dati)
 
 
+@app.route('/api/v1/inventars', methods=['GET'])
+def inventars():
+    # atveram datni
+    with open("dati/inventars.json", "r") as f:
+        # ielasām un pārvēršam par json
+        dati = json.loads(f.read())
+    
+    # pārveidojam par string pirms atgriežam
+    return jsonify(dati)
+
+
 @app.route('/api/v1/viela/<vielasID>', methods=['GET'])
 def viela_id(vielasID):
     # Noklusēta vērtība, ja viela netiks atrasta
